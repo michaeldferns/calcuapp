@@ -61,7 +61,7 @@ const HomeScreen = ({ logout }) => {
       <AppBar>
         <Toolbar>
           <Typography
-            variant="h8"
+            variant="h6"
             component="div"
             onClick={() => navigate('/')}
             sx={{ flexGrow: 1, cursor: 'pointer' }}
@@ -75,7 +75,7 @@ const HomeScreen = ({ logout }) => {
         </Toolbar>
       </AppBar>
       <Grid container spacing={2} sx={{ mt: 10 }}>
-        <Grid item xs={12}>
+        <Grid item align="center" xs={12}>
           <Outlet />
         </Grid>
       </Grid>
