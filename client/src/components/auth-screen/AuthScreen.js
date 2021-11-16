@@ -4,21 +4,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MaterialLink from '@mui/material/Link';
 import React, { Fragment } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-  Outlet,
-  Link,
-  useLocation,
-} from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 
 const AuthScreen = (props) => {
   const location = useLocation();
-
-  console.log(props);
 
   const renderBreadcrumb = () => {
     const pathname = location?.pathname;

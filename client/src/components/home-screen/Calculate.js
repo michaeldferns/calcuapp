@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import React, { useEffect, useState } from 'react';
+import api from '../../utils/api';
 
 const operations = {
   ADD: 'ADD',
@@ -30,10 +31,10 @@ const Calculate = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (submitting) {
-      setDisableAll(true);
-    } else {
+    if (!submitting) {
       setDisableAll(false);
+    } else {
+      setDisableAll(true);
     }
   }, [submitting, setDisableAll]);
 
@@ -76,6 +77,115 @@ const Calculate = () => {
     setZeroDecimalCount(0);
   };
 
+  const executeOperation = async () => {
+    setDisableAll(true);
+
+    let value = 0;
+    let route = '/calculate';
+    let operator = '';
+
+    switch (operation) {
+      case operations.ADD:
+        route += '/add';
+        operator = '\u002b';
+        break;
+      case operations.SUBTRACT:
+        route += '/subtract';
+        operator = '\u2212';
+        break;
+      case operations.MULTIPLY:
+        route += '/multiply';
+        operator = '\u00d7';
+        break;
+      case operations.DIVIDE:
+        route += '/divide';
+        operator = '\u00f7';
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const res = await api.post(route, {
+        currentInput,
+        previousInput,
+        text: `${previousInput} ${operator} ${currentInput}`,
+      });
+
+      value = res?.data?.value;
+
+      setDisplay(value.toString());
+      setOperation(null);
+      setPreviousInput(null);
+      setInputFlag(true);
+      setCurrentInput(value);
+      setDisableOperation(false);
+      setDisableClear(false);
+      setDisableEquals(true);
+      setDisableDecimal(false);
+      setZeroDecimalCount(0);
+      setSubmitting(false);
+      setDisableAll(false);
+    } catch (err) {
+      setDisplay('ERR');
+      setOperation(null);
+      setPreviousInput(null);
+      setInputFlag(false);
+      setCurrentInput(0);
+      setDisableOperation(true);
+      setDisableClear(true);
+      setDisableEquals(true);
+      setDisableDecimal(false);
+      setZeroDecimalCount(0);
+      setSubmitting(false);
+      setDisableAll(false);
+
+      return;
+    }
+  };
+
+  const executeRoot = async () => {
+    setDisableAll(true);
+
+    let value = 0;
+
+    try {
+      const res = await api.post('/calculate/root', {
+        leftValue: currentInput,
+      });
+
+      value = res?.data?.value;
+
+      setDisplay(value.toString());
+      setOperation(null);
+      setPreviousInput(null);
+      setInputFlag(true);
+      setCurrentInput(value);
+      setDisableOperation(false);
+      setDisableClear(false);
+      setDisableEquals(true);
+      setDisableDecimal(false);
+      setZeroDecimalCount(0);
+      setSubmitting(false);
+      setDisableAll(false);
+    } catch (err) {
+      setDisplay('ERR');
+      setOperation(null);
+      setPreviousInput(null);
+      setInputFlag(false);
+      setCurrentInput(0);
+      setDisableOperation(true);
+      setDisableClear(true);
+      setDisableEquals(true);
+      setDisableDecimal(false);
+      setZeroDecimalCount(0);
+      setSubmitting(false);
+      setDisableAll(false);
+
+      return;
+    }
+  };
+
   const handleOperation = (operation) => {
     const calculateOperations = [
       operations.ADD,
@@ -104,7 +214,23 @@ const Calculate = () => {
       setDisableDecimal(false);
       setInputFlag(false);
     } else if (operation === operations.SQRT) {
+      setOperation(operation);
+
+      executeRoot();
     } else if (operation === operations.NEGATE) {
+      if (currentInput) {
+        let tempValue = currentInput;
+
+        tempValue *= -1;
+
+        if (currentInput < 0) {
+          setDisplay(display.substring(1));
+        } else {
+          setDisplay(`-${display}`);
+        }
+
+        setCurrentInput(tempValue);
+      }
     } else if (operation === operations.EQUATE) {
       executeOperation();
     }
@@ -168,10 +294,6 @@ const Calculate = () => {
     return;
   };
 
-  const executeOperation = () => {
-    setDisableAll(true);
-  };
-
   return (
     <Box
       sx={{
@@ -183,7 +305,7 @@ const Calculate = () => {
         maxWidth: 480,
       }}
     >
-      <Grid container item spacing={2}>
+      <Grid container item justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <Box sx={{ width: '100%', p: 2, borderRadius: 2, bgcolor: 'black' }}>
             <Typography align="right" color="white">
@@ -209,7 +331,7 @@ const Calculate = () => {
               color="primary"
               sx={{ width: '100%' }}
               disabled={disableOperation || disableAll}
-              onClick={() => handleOperation(operations.CLEAR)}
+              onClick={() => handleOperation(operations.NEGATE)}
             >
               +/-
             </Button>
@@ -220,7 +342,7 @@ const Calculate = () => {
               color="primary"
               sx={{ width: '100%' }}
               disabled={disableOperation || disableAll}
-              onClick={() => handleOperation(operations.CLEAR)}
+              onClick={() => handleOperation(operations.SQRT)}
             >
               &#8730;
             </Button>

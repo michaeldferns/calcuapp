@@ -1,12 +1,12 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import AuthScreen from './components/auth-screen/AuthScreen';
 import Login from './components/auth-screen/Login';
 import Register from './components/auth-screen/Register';
-import Calculate from './components/calculate/Calculate';
-import History from './components/history/History';
+import Calculate from './components/home-screen/Calculate';
+import History from './components/home-screen/History';
 import HomeScreen from './components/home-screen/HomeScreen';
 import NotFound from './components/not-found/NotFound';
-import Profile from './components/profile/Profile';
+import Profile from './components/home-screen/Profile';
 
 const routes = (isAuthenticated) => [
   {

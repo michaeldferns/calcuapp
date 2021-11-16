@@ -1,8 +1,7 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import React, { Fragment, useState } from 'react';
-import api from '../../utils/api';
+import React, { Fragment } from 'react';
 
 const AuthForm = ({
   title,
@@ -13,6 +12,7 @@ const AuthForm = ({
   setPassword,
   error,
   status,
+  disableFlag = false,
   handleSubmit,
 }) => {
   return (
@@ -30,6 +30,7 @@ const AuthForm = ({
           type="text"
           id="email"
           value={email}
+          disabled={disableFlag}
           onInput={(e) => setEmail(e.target.value)}
           autoFocus
         />
@@ -42,6 +43,7 @@ const AuthForm = ({
           type="password"
           id="password"
           value={password}
+          disabled={disableFlag}
           onInput={(e) => setPassword(e.target.value)}
         />
         {status ? <Typography variant="body2">{status}</Typography> : null}
@@ -54,6 +56,7 @@ const AuthForm = ({
           type="submit"
           fullWidth
           variant="contained"
+          disabled={disableFlag}
           sx={{ mt: 2, mb: 2 }}
         >
           {buttonText}

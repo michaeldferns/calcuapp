@@ -6,7 +6,7 @@ module.exports = async (value) => {
   }
 
   try {
-    const user = await db.models.Users.findOne({
+    const user = await db.models.User.findOne({
       where: {
         email: value,
       },

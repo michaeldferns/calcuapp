@@ -55,10 +55,15 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      const newUser = await db.models.Users.create({
-        email,
-        password,
-      });
+      const newUser = await db.models.User.create(
+        {
+          email,
+          password,
+        },
+        {
+          attributes: {},
+        }
+      );
 
       return res.status(201).send(newUser);
     } catch (err) {

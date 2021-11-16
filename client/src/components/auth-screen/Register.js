@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from './AuthForm';
 import api from '../../utils/api';
@@ -8,7 +8,10 @@ const Register = ({ history }) => {
   const [status, setStatus] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [disableFlag, setDisableFlag] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {}, [disableFlag]);
 
   const handleSubmit = async (email, password, e) => {
     e.preventDefault();
@@ -25,6 +28,7 @@ const Register = ({ history }) => {
 
       setEmail('');
       setPassword('');
+      setDisableFlag(true);
       setStatus('Registration successful. Redirecting to login screen.');
 
       setTimeout(() => {
@@ -54,6 +58,7 @@ const Register = ({ history }) => {
       setPassword={setPassword}
       error={error}
       status={status}
+      disableFlag={disableFlag}
       handleSubmit={handleSubmit}
     />
   );

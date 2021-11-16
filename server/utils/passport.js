@@ -15,10 +15,13 @@ passport.use(
     { usernameField: 'email' },
     async (email, password, done) => {
       try {
-        const user = await db.models.Users.findOne({
+        const user = await db.models.User.findOne({
           where: {
             email,
             password,
+          },
+          attributes: {
+            exclude: ['password', 'createdAt', 'updatedAt'],
           },
         });
 
