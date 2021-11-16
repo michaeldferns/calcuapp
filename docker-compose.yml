@@ -10,6 +10,10 @@ services:
     networks:
       - server
       - client
+    volumes:
+      - type: bind
+        source: ./server/database.sqlite
+        target: /app/database.sqlite
   client:
     build:
       context: ./client
