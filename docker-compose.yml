@@ -1,19 +1,15 @@
 version: '3.8'
 
 services:
-  api:
+  server:
     build:
       context: ./server
       dockerfile: Dockerfile
-    ports:
-      - '3001:3001'
     networks:
       - server
       - client
-    volumes:
-      - type: bind
-        source: ./server/database.sqlite
-        target: /app/database.sqlite
+    ports:
+      - '3001:3001'
   client:
     build:
       context: ./client

@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Typograpgy from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 
@@ -33,21 +34,98 @@ const tableHeadings = [
 
 const History = () => {
   const [history, setHistory] = useState([]);
+  const [error, setError] = useState();
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(5);
+
+  const getNewData = async () => {
+    try {
+      const res = await api.get(
+        `/history?limit=${limit}&offset=${page * limit}`
+      );
+
+      const { count: histCount, rows: hist } = res?.data;
+
+      if (!hist || !Array.isArray(hist)) {
+        setCount(0);
+        return setHistory([]);
+      }
+
+      setCount(histCount);
+      setHistory(hist);
+    } catch (err) {
+      setError('Failed to get history.');
+    }
+  };
+
+  const handlePageChange = async (_event, newPage) => {
+    try {
+      setPage(newPage);
+
+      const res = await api.get(
+        `/history?limit=${limit}&offset=${newPage * limit}`
+      );
+
+      const { count: histCount, rows: hist } = res?.data;
+
+      if (!hist || !Array.isArray(hist)) {
+        setCount(0);
+        return setHistory([]);
+      }
+
+      setCount(histCount);
+      setHistory(hist);
+    } catch (err) {
+      setError('Failed to get history.');
+    }
+  };
+
+  const handleLimitChange = async (event) => {
+    const newLimit = event.target.value;
+
+    try {
+      setLimit(parseInt(newLimit, 10));
+      setPage(0);
+
+      const res = await api.get(`/history?limit=${newLimit}&offset=0`);
+
+      const { count: histCount, rows: hist } = res?.data;
+
+      if (!hist || !Array.isArray(hist)) {
+        setCount(0);
+        return setHistory([]);
+      }
+
+      setCount(histCount);
+      setHistory(hist);
+    } catch (err) {
+      setError('Failed to get history.');
+    }
+  };
 
   useEffect(() => {
-    const getHistoru = async () => {
+    const getHistory = async () => {
       try {
-        const res = await api.get('/history');
+        const res = await api.get(
+          `/history?limit=${limit}&offset=${page * limit}`
+        );
 
-        const hist = res?.data;
+        const { count: histCount, rows: hist } = res?.data;
 
+        if (!hist || !Array.isArray(hist)) {
+          setCount(0);
+          return setHistory([]);
+        }
+
+        setCount(histCount);
         setHistory(hist);
       } catch (err) {
-        console.log('error');
+        setError('Failed to get history.');
       }
     };
 
-    getHistoru();
+    getHistory();
   }, []);
 
   return (
@@ -80,9 +158,19 @@ const History = () => {
                   </TableRow>
                 ))}
               </TableBody>
+              <TablePagination
+                count={count}
+                rowsPerPageOptions={[5, 10]}
+                rowsPerPage={limit}
+                page={page}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleLimitChange}
+              />
             </Table>
           </TableContainer>
-          {/* <TablePagination /> */}
+          {error ? (
+            <Typograpgy sc={{ color: 'red' }}>{error}</Typograpgy>
+          ) : null}
         </Grid>
       </Grid>
     </Box>

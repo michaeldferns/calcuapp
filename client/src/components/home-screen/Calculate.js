@@ -29,6 +29,7 @@ const Calculate = () => {
   const [disableDecimal, setDisableDecimal] = useState(false);
   const [zeroDecimalCount, setZeroDecimalCount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [disableNegate, setDisableNegate] = useState(false);
 
   useEffect(() => {
     if (!submitting) {
@@ -41,12 +42,15 @@ const Calculate = () => {
   useEffect(() => {
     if (inputFlag) {
       setDisableClear(false);
+      setDisableNegate(false);
     } else if (previousInput && !inputFlag) {
       setDisableClear(false);
+      setDisableNegate(false);
     } else {
       setDisableClear(true);
+      setDisableNegate(true);
     }
-  }, [inputFlag, previousInput, setDisableClear]);
+  }, [inputFlag, previousInput, setDisableClear, setDisableNegate]);
 
   useEffect(() => {
     if (inputFlag && !operation) {
@@ -78,7 +82,7 @@ const Calculate = () => {
   };
 
   const executeOperation = async () => {
-    setDisableAll(true);
+    setSubmitting(true);
 
     let value = 0;
     let route = '/calculate';
@@ -109,7 +113,11 @@ const Calculate = () => {
       const res = await api.post(route, {
         currentInput,
         previousInput,
-        text: `${previousInput} ${operator} ${currentInput}`,
+        text: `${
+          previousInput < 0 ? `(-${previousInput})` : `${previousInput}`
+        } ${operator} ${
+          currentInput < 0 ? `(-${currentInput})` : `${currentInput}`
+        }`,
       });
 
       value = res?.data?.value;
@@ -145,13 +153,13 @@ const Calculate = () => {
   };
 
   const executeRoot = async () => {
-    setDisableAll(true);
+    setSubmitting(true);
 
     let value = 0;
 
     try {
       const res = await api.post('/calculate/root', {
-        leftValue: currentInput,
+        currentInput,
       });
 
       value = res?.data?.value;
@@ -330,7 +338,7 @@ const Calculate = () => {
               variant="contained"
               color="primary"
               sx={{ width: '100%' }}
-              disabled={disableOperation || disableAll}
+              disabled={disableNegate || disableAll}
               onClick={() => handleOperation(operations.NEGATE)}
             >
               +/-

@@ -26,14 +26,15 @@ const Register = ({ history }) => {
         setError('');
       }
 
-      setEmail('');
-      setPassword('');
-      setDisableFlag(true);
       setStatus('Registration successful. Redirecting to login screen.');
 
       setTimeout(() => {
-        navigate('/auth');
+        navigate('/auth', { state: { email } });
       }, 2000);
+
+      setEmail('');
+      setPassword('');
+      setDisableFlag(true);
     } catch (err) {
       if (err.response) {
         const errors = err.response?.data?.errors;

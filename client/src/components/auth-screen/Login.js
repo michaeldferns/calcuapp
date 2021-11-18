@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import AuthForm from './AuthForm';
 import api from '../../utils/api';
 import * as actions from '../../actions';
 
 const Login = ({ login }) => {
+  const location = useLocation();
+
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(location.state?.email || '');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (email, password, e) => {

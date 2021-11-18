@@ -7,7 +7,7 @@ const math = require('../utils/math');
 const router = express.Router();
 
 // Setup Auth Middleware
-// router.use(isAuthenticated);
+router.use(isAuthenticated);
 
 /**
  * Add
