@@ -41,7 +41,17 @@
 >
 > The library used can be found here: https://github.com/mhorbatak/SENG560_Assgn_1
 
-## Client Pages
+## Client
+
+### About Authentication
+
+> The application features session based auth.
+>
+> The routes of the application are wrapped in conditional logic to redirect if necessary. Basically, uou must authenticate before you'll be able to use the full scope of the application
+
+### Navigation
+
+> From an authenticated state, you'll be able to use a navigation in the top right to access all pages.
 
 ### Unauthenticated Routes
 
@@ -62,3 +72,25 @@
 #### /
 
 > The home screen after a successful authentication. The screen will display the calculator, which is fully operational with fancy logic to disable buttons based on the current input.
+
+#### /history
+
+> A history screen displaying all past inputs for the account in use. You'll be able to use this page to paginate between past inputs and their resulting values.
+
+#### /profile
+
+> This would essentially be a settings page in a production application. It just features a button to delete the current account.
+>
+> History records are cascade deleted when the user is deleted.
+
+### Library Usage
+
+> As mentioned earlier, this application makes use of a library created by a fellow classmate. This is the key aspect to the assignment. The experience was relatively simple.
+>
+> The repository was added to this one as a submodule.
+>
+> All of the provided math operations of the library are used in the calculator logic except for the exponent one. There was no issue with that equation, I just used a reference image for the UI and I realized late in the project that there was no button for exponents.
+>
+> Not many drastic changes were necessary to make use of the library. Just two accommodations were made within the endpoint logic. For one, the only error handling in the operation functions resulted in a string return. For this reason, any string return value resulted in just a 500 reponse status. Beyond that, the function for division did not handle cases of divide by zero, so that also resulted in a 500 error.
+>
+> Beyond that, it was an enjoyable experince.
