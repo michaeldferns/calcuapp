@@ -16,4 +16,15 @@
 ### Primary Option - docker-compose
 
 > The project is setup such that Docker can be used to spin up a NGiNX server hosting a React application and an Express web server.
+>
 > Docker Desktop is a simple way to get started with Docker. If you do not have Docker Desktop installed, you can visit the Docker website here: https://www.docker.com/products/docker-desktop
+>
+> From the root of the project folder, running "docker-compose up" will start the containers necessary for execution.
+
+### Secondary Option - Development Commands
+
+> If you do not want to download Docker Decktop, you could simply use the dev commands to run dev instances of the client and server. \n
+>
+> In order to do so, you'll have to install Node locally. I wrote the project with Node version 16.13.0 installed.
+>
+> You can install Node here: https://nodejs.org/en/download/
