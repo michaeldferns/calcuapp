@@ -1,4 +1,5 @@
 const { DataTypes, UUIDV4 } = require('sequelize');
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize) => {
   const User = sequelize.define(
@@ -21,19 +22,27 @@ module.exports = (sequelize) => {
     },
     {
       hooks: {
-        afterCreate: (record) => {
-          delete record.dataValues.password;
-          delete record.dataValues.createdAt;
-          delete record.dataValues.updatedAt;
+        afterCreate: (user) => {
+          delete user.dataValues.password;
+          delete user.dataValues.createdAt;
+          delete user.dataValues.updatedAt;
         },
-        afterUpdate: (record) => {
-          delete record.dataValues.password;
-          delete record.dataValues.createdAt;
-          delete record.dataValues.updatedAt;
+        afterUpdate: (user) => {
+          delete user.dataValues.password;
+          delete user.dataValues.createdAt;
+          delete user.dataValues.updatedAt;
+        },
+        beforeCreate: async (user) => {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
         },
       },
     }
   );
+
+  User.prototype.validPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+  };
 
   return User;
 };

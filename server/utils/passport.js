@@ -18,18 +18,27 @@ passport.use(
         const user = await db.models.User.findOne({
           where: {
             email,
-            password,
           },
           attributes: {
-            exclude: ['password', 'createdAt', 'updatedAt'],
+            exclude: ['createdAt', 'updatedAt'],
           },
         });
 
         if (!user) {
           return done(null, false, {
-            message: 'Incorrect username or password.',
+            message: 'A user with that email does not exist.',
           });
         }
+
+        const valid = await user.validPassword(password);
+
+        if (!valid) {
+          return done(null, false, {
+            message: 'Login failed.',
+          });
+        }
+
+        user.password = undefined;
 
         return done(null, user);
       } catch (err) {

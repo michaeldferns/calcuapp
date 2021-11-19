@@ -169,15 +169,33 @@ router.post('/divide', async (req, res) => {
  * Square Root
  */
 router.post('/root', async (req, res) => {
-  const { leftValue } = req.body;
+  const { currentInput, text } = req.body;
+
+  const user = req.user;
 
   try {
-    const sum = math.squareRoot(leftValue);
+    const value = math.squareRoot(currentInput);
+
+    await db.models.History.create({
+      userId: user.id,
+      value: value.toString(),
+      text,
+    });
 
     return res.send({
-      value: sum,
+      value,
     });
   } catch (err) {
+    try {
+      await db.models.History.create({
+        userId: user.id,
+        value: 'ERR',
+        text,
+      });
+    } catch (err) {
+      return res.status(500).send('Internal server error.');
+    }
+
     return res.status(500).send('Internal server error.');
   }
 });

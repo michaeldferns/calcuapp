@@ -160,6 +160,7 @@ const Calculate = () => {
     try {
       const res = await api.post('/calculate/root', {
         currentInput,
+        text: `sqrt(${currentInput})`,
       });
 
       value = res?.data?.value;
