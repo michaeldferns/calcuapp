@@ -43,14 +43,22 @@
 
 ## Client Pages
 
-### /auth
+### Unauthenticated Routes
+
+#### /auth
 
 > This path leads to a login screen. The application is setup to instantiate a sqlite database on startup so a new user will need to be registered at "/auth/register" to get started.
 
-### /auth/register
+#### /auth/register
 
 > A registration screen. You can make up any email and password between the length of 8 and 200 characters.
 >
 > No logic exists to actually send emails so do not worry about actually owning the email address used.
 >
 > On a successful registration, you will be regirected to the login screen with that email pre-popilated in the email field.
+
+### Authenticated Routes
+
+#### /
+
+> The home screen after a successful authentication. The screen will display the calculator, which is fully operational with fancy logic to disable buttons based on the current input.
