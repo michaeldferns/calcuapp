@@ -9,6 +9,7 @@
 ## Clone Repo
 
 > If you are reading this README, then you're visiting the repo for the application. Go ahead and clone down a copy of the repo.
+>
 > Note: This repo makes use of a submodule, so you'll have to clone using a recursive flag. Ex: git clone https://github.com/michaeldferns/calcuapp.git --recursive
 
 ## Run Options
@@ -23,8 +24,13 @@
 
 ### Secondary Option - Development Commands
 
-> If you do not want to download Docker Decktop, you could simply use the dev commands to run dev instances of the client and server. \n
+> If you do not want to download Docker Decktop, you could simply use the dev commands to run dev instances of the client and server.
 >
 > In order to do so, you'll have to install Node locally. I wrote the project with Node version 16.13.0 installed.
 >
 > You can install Node here: https://nodejs.org/en/download/
+>
+> With node installed you should be able to run npm install with a command line in both the client and server directories. This will install dependencies.
+>
+> To run the React client: npm start
+> To run the Express server: npm start
