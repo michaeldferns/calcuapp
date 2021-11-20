@@ -1,0 +1,3 @@
+[submodule "server/utils/math"]
+	path = server/utils/math
+	url = https://github.com/mhorbatak/SENG560_Assgn_1.git
